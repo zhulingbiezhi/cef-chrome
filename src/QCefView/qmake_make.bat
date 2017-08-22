@@ -1,0 +1,2 @@
+qmake -tp vc
+pause
