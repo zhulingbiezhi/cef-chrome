@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <QDebug>
 
 #pragma region project_headers
 #include "QCefViewDefaultRenderDelegate.h"
@@ -35,8 +36,8 @@ namespace QCefViewDefaultRenderDelegate
 		// insert the QCefClient Object into this frame.window object
 		CefRefPtr<CefV8Value> objWindow = context->GetGlobal();
 		CefRefPtr<QCefClient> objClient = new QCefClient(browser, frame);
-		objWindow->SetValue(QCEF_OBJECT_NAME,
-			objClient->GetObject(), V8_PROPERTY_ATTRIBUTE_READONLY);
+
+		objWindow->SetValue(QCEF_OBJECT_NAME, objClient->GetObject(), V8_PROPERTY_ATTRIBUTE_READONLY);
 
 		int browserId = browser->GetIdentifier();
 		int64 frameId = frame->GetIdentifier();

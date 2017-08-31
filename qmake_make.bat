@@ -2,7 +2,7 @@
 set CurDir=%~dp0
 set QCefViewDir=%CurDir%\src\QCefView\
 set QCefViewHelperDir=%CurDir%\src\QCefViewHelper\
-set QCefViewTestDir=%CurDir%\test\QCefViewTest\
+set QCefViewTestDir=%CurDir%\src\QCefViewTest\
 
 
 echo qmake QCefView start...

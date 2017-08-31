@@ -63,8 +63,7 @@ void QCefClient::V8Handler::ExecuteInvokeMethod(const CefString& function,
 	CefRefPtr<CefV8Value>& retval, 
 	CefString& exception)
 {
-	CefRefPtr<CefProcessMessage> msg
-		= CefProcessMessage::Create(INVOKEMETHOD_NOTIFY_MESSAGE);
+	CefRefPtr<CefProcessMessage> msg= CefProcessMessage::Create(INVOKEMETHOD_NOTIFY_MESSAGE);
 
 	CefRefPtr<CefListValue> args = msg->GetArgumentList();
 	int frameId = (int)frame_->GetIdentifier();
@@ -238,25 +237,22 @@ QCefClient::QCefClient(CefRefPtr<CefBrowser> browser,
 	CefRefPtr<V8Handler> handler = new V8Handler(browser_, frame_, eventListenerListMap_);
 
 	// create function function
-	CefRefPtr<CefV8Value> funcInvokeMethod = 
-		CefV8Value::CreateFunction(QCEF_INVOKEMETHOD, handler);
+	CefRefPtr<CefV8Value> funcInvokeMethod =  CefV8Value::CreateFunction(QCEF_INVOKEMETHOD, handler);
+
 	// add this function to window object
-	object_->SetValue(QCEF_INVOKEMETHOD, funcInvokeMethod, 
-		V8_PROPERTY_ATTRIBUTE_READONLY);
+	object_->SetValue(QCEF_INVOKEMETHOD, funcInvokeMethod,  V8_PROPERTY_ATTRIBUTE_READONLY);
 
 	// create function function
-	CefRefPtr<CefV8Value> funcAddEventListener = 
-		CefV8Value::CreateFunction(QCEF_ADDEVENTLISTENER, handler);
+	CefRefPtr<CefV8Value> funcAddEventListener =  CefV8Value::CreateFunction(QCEF_ADDEVENTLISTENER, handler);
+
 	// add this function to window object
-	object_->SetValue(QCEF_ADDEVENTLISTENER, funcAddEventListener,
-		V8_PROPERTY_ATTRIBUTE_READONLY);
+	object_->SetValue(QCEF_ADDEVENTLISTENER, funcAddEventListener, V8_PROPERTY_ATTRIBUTE_READONLY);
 
 	// create function function
-	CefRefPtr<CefV8Value> funcRemoveEventListener =
-		CefV8Value::CreateFunction(QCEF_REMOVEEVENTLISTENER, handler);
+	CefRefPtr<CefV8Value> funcRemoveEventListener = CefV8Value::CreateFunction(QCEF_REMOVEEVENTLISTENER, handler);
+
 	// add this function to window object
-	object_->SetValue(QCEF_REMOVEEVENTLISTENER, funcRemoveEventListener,
-		V8_PROPERTY_ATTRIBUTE_READONLY);
+	object_->SetValue(QCEF_REMOVEEVENTLISTENER, funcRemoveEventListener, V8_PROPERTY_ATTRIBUTE_READONLY);
 }
 
 CefRefPtr<CefV8Value> QCefClient::GetObject()

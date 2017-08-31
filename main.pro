@@ -10,5 +10,5 @@ TEMPLATE = subdirs
 CONFIG += ordered 
 SUBDIRS += src/QCefView \
 	src/QCefViewHelper \
-    test/QCefViewTest \
+    src/QCefViewTest \
 	

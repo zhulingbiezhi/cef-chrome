@@ -30,7 +30,7 @@ RCC_DIR = temp/rcc
 HEADERS += ./QCefViewHelper.h \
     ./resource.h \
 	./targetver.h \
-	../public/QCefCommon.h \
+	../public/Common.h \
 	./CefViewRenderApp/QCefViewRenderApp.h \
 	./CefViewRenderApp/RenderDelegates/QCefClient.h \
 	./CefViewRenderApp/RenderDelegates/QCefViewDefaultRenderDelegate.h \

@@ -9,7 +9,7 @@ CONFIG  -= flat
 
 DEFINES += QCEFVIEW_LIB
 
-INCLUDEPATH +=  ../../dep/cef
+INCLUDEPATH +=  ../../dep/cef ../../QCefViewSDK 
    
 PRECOMPILED_HEADER = stdafx.h
 
@@ -19,7 +19,7 @@ UI_DIR  = temp/ui
 MOC_DIR = temp/moc
 RCC_DIR = temp/rcc
 
-QMAKE_POST_LINK += copy /y .\\inc\\*.h ..\\..\\QCefViewSDK\\include && copy /y .\\inc\\*.h ..\\..\\..\\Html5Player\\inc &&
+QMAKE_POST_LINK += copy /y ..\\..\\QCefViewSDK\\inc ..\\..\\..\\Html5Player\\inc &&
 
 CONFIG(release, debug|release) {	
 	OBJECTS_DIR = temp/release
@@ -51,12 +51,13 @@ HEADERS += ./CCefSetting.h \
     ./CCefManager.h \
     ./CCefWindow.h \
 	./CCookieManager.h \
-    ../public/QCefCommon.h \
-    ./inc/QCefSetting.h \
-    ./inc/QCefEvent.h \
-    ./inc/QCefView.h \
-    ./inc/QCefQuery.h \
-	./inc/QCefCommon.h \
+    ../public/Common.h \
+	../../QCefViewSDK/inc/QCefCommon.h \
+	../../QCefViewSDK/inc/QCefEvent.h \
+	../../QCefViewSDK/inc/QCefInvoker.h \
+	../../QCefViewSDK/inc/QCefQuery.h \
+	../../QCefViewSDK/inc/QCefSetting.h \
+	../../QCefViewSDK/inc/QCefView.h \
     ./CefViewBrowserApp/QCefViewBrowserApp.h \
     ./CefViewBrowserApp/QCefViewBrowserHandler.h \
     ./CefViewBrowserApp/QCefQueryHandler.h \
@@ -71,6 +72,7 @@ SOURCES += ./QCefEvent.cpp \
     ./CCefManager.cpp \
     ./CCefSetting.cpp \
     ./CCefWindow.cpp \
+	./QCefInvoker.cpp \
 	./CCookieManager.cpp \
     ./CefViewBrowserApp/QCefViewBrowserApp.cpp \
     ./CefViewBrowserApp/QCefViewBrowserAppHelper.cpp \

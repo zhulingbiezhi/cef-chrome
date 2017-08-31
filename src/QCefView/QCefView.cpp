@@ -5,6 +5,7 @@
 #include <QResizeEvent>
 #include <QVariant>
 #include <QDebug>
+#include <QApplication>
 #pragma endregion qt_headers
 
 #pragma region cef_headers
@@ -17,6 +18,7 @@
 #include "inc/QCefQuery.h"
 #include "inc/QCefView.h"
 #include "inc/QCefEvent.h"
+#include "inc/QCefInvoker.h"
 #include "CCefManager.h"
 #include "CCefWindow.h"
 
@@ -24,6 +26,7 @@
 QCefView::QCefView(const QString url, QWidget* parent /*= 0*/)
 	: QWidget(parent)
 	, pCefWindow_(NULL)
+	, pCefInvoker_(NULL)
 {
 	QGridLayout* layout = new QGridLayout;
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -44,7 +47,22 @@ QCefView::QCefView(const QString url, QWidget* parent /*= 0*/)
 
 QCefView::~QCefView()
 {
+	qDebug() << __FUNCTION__;
+}
 
+void QCefView::Close()
+{
+	pCefWindow_->Close();
+}
+
+QCefInvoker* QCefView::getInvoker()
+{
+	return pCefInvoker_.data();
+}
+
+void QCefView::registerInvoker(QCefInvoker* invoker)
+{
+	pCefInvoker_ = invoker;
 }
 
 void QCefView::getUrlCookie(const QString& url, QList<TCefCookie>& cookieList)
@@ -59,12 +77,7 @@ void QCefView::getAllCookie(QList<TCefCookie>& cookieList)
 
 void QCefView::setCookie(const QString& url, const QString& key, const QString& value)
 {
-	QString strUrl = url;
-	if (!strUrl.contains("https://") && !strUrl.contains("http://"))
-	{
-		strUrl.prepend("http://");
-	}
-	pCefWindow_->SetCookie(strUrl, key, value);
+	pCefWindow_->SetCookie(url, key, value);
 }
 
 void QCefView::processQCefUrlRequest(const QString& url)
@@ -73,13 +86,6 @@ void QCefView::processQCefUrlRequest(const QString& url)
 }
 
 void QCefView::processQCefQueryRequest(const QCefQuery& query)
-{
-
-}
-
-void QCefView::onInvokeMethodNotify(
-	const QString method,
-	const QVariantList arguments)
 {
 
 }
@@ -174,7 +180,7 @@ bool QCefView::triggerEvent(int frameId, const QString& name, const QCefEvent& e
 			auto frame = pCefWindow_->cefViewHandler()->GetBrowser()->GetFrame(frameId);
 			if (frame)
 			{
-				return sendEVentNotifyMessage(frameId, name, event);
+				return sendEventNotifyMessage(frameId, name, event);
 			}
 		}
 	}
@@ -188,7 +194,7 @@ bool QCefView::broadcastEvent(const QString& name, const QCefEvent& event)
 	{
 		if (pCefWindow_)
 		{
-			return sendEVentNotifyMessage(0, name, event);
+			return sendEventNotifyMessage(0, name, event);
 		}
 	}
 	return false;
@@ -214,6 +220,23 @@ void QCefView::onLoadError(int errorCode,
 	const QString& failedUrl)
 {
 
+}
+
+void QCefView::onFullScreen(const bool& full)
+{
+	qDebug() << __FUNCTION__;
+	if (full)
+	{
+		this->setWindowFlags(Qt::Window);
+		this->showFullScreen();
+		QApplication::setActiveWindow(this);
+	} 
+	else
+	{
+		this->setWindowFlags(Qt::SubWindow);
+		this->showNormal();
+		QApplication::setActiveWindow(this);
+	}
 }
 
 WId QCefView::getCefWinId()
@@ -243,10 +266,10 @@ void QCefView::notifyMoveOrResizeStarted()
 	}
 }
 
-bool QCefView::sendEVentNotifyMessage(int frameId, const QString& name, const QCefEvent& event)
+bool QCefView::sendEventNotifyMessage(int frameId, const QString& name, const QCefEvent& event)
 {
-	CefRefPtr<CefProcessMessage> msg = CefProcessMessage::Create(
-		TRIGGEREVENT_NOTIFY_MESSAGE);
+	CefRefPtr<CefProcessMessage> msg = CefProcessMessage::Create(TRIGGEREVENT_NOTIFY_MESSAGE);
+
 	CefRefPtr<CefListValue> arguments = msg->GetArgumentList();
 
 	int idx = 0;
@@ -311,14 +334,21 @@ void QCefView::onUrlChange(const QString& url)
 
 }
 
+void QCefView::onKeyEvent(const int& key)
+{
+
+}
+
 bool QCefView::excContextMenu(int id)
 {
 	qDebug() << __FUNCTION__;
 	return false;
 }
 
-std::list<_contextMenuInfo> QCefView::getMenuItems()
+bool QCefView::getMenuInfo(int index, int& command, QString& lblName, bool& itemEnable)
 {
-	qDebug() << __FUNCTION__;
-	return std::list<_contextMenuInfo>();
+	command = -1;
+	lblName = "";
+	itemEnable = false;
+	return false;
 }

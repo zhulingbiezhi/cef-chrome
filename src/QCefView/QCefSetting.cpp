@@ -9,8 +9,7 @@ void QCefSetting::setBrowserSubProcessPath(const QString& path)
 
 const QString QCefSetting::browserSubProcessPath()
 {
-	return QString::fromStdString(
-		CCefSetting::browser_sub_process_path.ToString());
+	return QString::fromStdString(CCefSetting::browser_sub_process_path.ToString());
 }
 
 void QCefSetting::setResourceDirectoryPath(const QString& path)
@@ -20,8 +19,7 @@ void QCefSetting::setResourceDirectoryPath(const QString& path)
 
 const QString QCefSetting::resourceDirectoryPath()
 {
-	return QString::fromStdString(
-		CCefSetting::resource_directory_path.ToString());
+	return QString::fromStdString(CCefSetting::resource_directory_path.ToString());
 }
 
 void QCefSetting::setLocalesDirectoryPath(const QString& path)
@@ -31,8 +29,7 @@ void QCefSetting::setLocalesDirectoryPath(const QString& path)
 
 const QString QCefSetting::localesDirectoryPath()
 {
-	return QString::fromStdString(
-		CCefSetting::locales_directory_path.ToString());
+	return QString::fromStdString(CCefSetting::locales_directory_path.ToString());
 }
 
 void QCefSetting::setUserAgent(const QString& agent)
@@ -42,6 +39,5 @@ void QCefSetting::setUserAgent(const QString& agent)
 
 const QString QCefSetting::userAgent()
 {
-	return QString::fromStdString(
-		CCefSetting::user_agent.ToString());
+	return QString::fromStdString(CCefSetting::user_agent.ToString());
 }

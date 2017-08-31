@@ -34,24 +34,18 @@ void CCefManager::AddBrowserRefCount()
 	{
 		CCefSetting::initializeInstance();
 
-		CefString(&cef_settings_.browser_subprocess_path)
-			= CCefSetting::browser_sub_process_path;
-		CefString(&cef_settings_.resources_dir_path) 
-			= CCefSetting::resource_directory_path;
-		CefString(&cef_settings_.locales_dir_path) 
-			= CCefSetting::locales_directory_path;
+		CefString(&cef_settings_.browser_subprocess_path) = CCefSetting::browser_sub_process_path;
+		CefString(&cef_settings_.resources_dir_path) = CCefSetting::resource_directory_path;
+		CefString(&cef_settings_.locales_dir_path)  = CCefSetting::locales_directory_path;
+		CefString(&cef_settings_.user_agent) = CCefSetting::user_agent;
 
-		::CefString(&cef_settings_.user_agent)
-			= CCefSetting::user_agent;
+		//cef_settings_.single_process = true;
 
 		cef_settings_.multi_threaded_message_loop = TRUE;
 
-#ifndef DEBUG
 		cef_settings_.log_severity = LOGSEVERITY_DEFAULT;
-		cef_settings_.remote_debugging_port = 8080;
-#else
-		cef_settings_.log_severity = LOGSEVERITY_DISABLE;
-#endif
+//		cef_settings_.remote_debugging_port = 8080;
+
 
 		app_ = new QCefViewBrowserApp();
 

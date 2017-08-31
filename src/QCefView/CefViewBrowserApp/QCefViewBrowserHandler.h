@@ -20,9 +20,9 @@ class CefRequestHandler;
 class QCefViewBrowserHandler
 	: public CefClient
 	, public CefContextMenuHandler
-	//, public CefDialogHandler
+	//,public CefDialogHandler
 	, public CefDisplayHandler
-	//, public CefDownloadHandler
+	//,public CefDownloadHandler
 	, public CefDragHandler
 	, public CefGeolocationHandler
 	, public CefJSDialogHandler
@@ -30,6 +30,7 @@ class QCefViewBrowserHandler
 	, public CefLifeSpanHandler
 	, public CefLoadHandler
 	, public CefRequestHandler
+	, public CefFocusHandler
 {
 	typedef CefRefPtr<CefMessageRouterBrowserSide>	MessageRouterPtr;
 	typedef std::set<CefMessageRouterBrowserSide::Handler*> MessageHandlerSet;
@@ -86,160 +87,61 @@ public:
 		return this;
 	}
 
-	virtual bool OnProcessMessageReceived(
-		CefRefPtr<CefBrowser> browser,
-		CefProcessId source_process,
-		CefRefPtr<CefProcessMessage> message);
+	virtual bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser, CefProcessId source_process, CefRefPtr<CefProcessMessage> message);
 
 	// CefContextMenuHandler methods
-	virtual void OnBeforeContextMenu(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		CefRefPtr<CefContextMenuParams> params,
-		CefRefPtr<CefMenuModel> model);
-	virtual bool OnContextMenuCommand(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		CefRefPtr<CefContextMenuParams> params,
-		int command_id,
-		EventFlags event_flags);
+	virtual void OnBeforeContextMenu(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, CefRefPtr<CefMenuModel> model);
+
+	virtual bool OnContextMenuCommand(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, int command_id, EventFlags event_flags);
 
 	// CefDialogHandler methods
-	//virtual bool OnFileDialog(
-	//	CefRefPtr<CefBrowser> browser,
-	//	FileDialogMode mode,
-	//	const CefString& title,
-	//	const CefString& default_file_name,
-	//	const std::vector<CefString>& accept_types,
-	//	CefRefPtr<CefFileDialogCallback> callback);
+	//virtual bool OnFileDialog(CefRefPtr<CefBrowser> browser, FileDialogMode mode, const CefString& title,const CefString& default_file_name, const std::vector<CefString>& accept_types, CefRefPtr<CefFileDialogCallback> callback);
 
 	// CefDisplayHandler methods
-	virtual void OnAddressChange(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		const CefString& url);
-	virtual void OnTitleChange(
-		CefRefPtr<CefBrowser> browser,
-		const CefString& title);
-	virtual bool OnConsoleMessage(
-		CefRefPtr<CefBrowser> browser,
-		const CefString& message,
-		const CefString& source,
-		int line);
+	virtual void OnAddressChange(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& url);
+	virtual void OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title);
+	virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line);
 
 	// CefDownloadHandler methods
-	//virtual void OnBeforeDownload(
-	//	CefRefPtr<CefBrowser> browser,
-	//	CefRefPtr<CefDownloadItem> download_item,
-	//	const CefString& suggested_name,
-	//	CefRefPtr<CefBeforeDownloadCallback> callback);
-	//virtual void OnDownloadUpdated(
-	//	CefRefPtr<CefBrowser> browser,
-	//	CefRefPtr<CefDownloadItem> download_item,
-	//	CefRefPtr<CefDownloadItemCallback> callback);
+
+	//virtual void OnBeforeDownload(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDownloadItem> download_item, const CefString& suggested_name, CefRefPtr<CefBeforeDownloadCallback> callback);	
+	//virtual void OnDownloadUpdated(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDownloadItem> download_item, CefRefPtr<CefDownloadItemCallback> callback);
 
 	//CefDragHandler methods
-	virtual bool OnDragEnter(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefDragData> dragData,
-		CefDragHandler::DragOperationsMask mask);
+	virtual bool OnDragEnter(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDragData> dragData, CefDragHandler::DragOperationsMask mask);
 
 	// CefGeolocationHandler methods
-	//virtual bool OnRequestGeolocationPermission(
-	//	CefRefPtr<CefBrowser> browser,
-	//	const CefString& requesting_url,
-	//	int request_id,
-	//	CefRefPtr<CefGeolocationCallback> callback);
+
+	//virtual bool OnRequestGeolocationPermission(CefRefPtr<CefBrowser> browser,const CefString& requesting_url,int request_id, CefRefPtr<CefGeolocationCallback> callback);
 
 	// CefJSDialogHandler methods
-	virtual bool OnJSDialog(
-		CefRefPtr<CefBrowser> browser,
-		const CefString& origin_url,
-		const CefString& accept_lang,
-		JSDialogType dialog_type,
-		const CefString& message_text,
-		const CefString& default_prompt_text,
-		CefRefPtr<CefJSDialogCallback> callback,
-		bool& suppress_message);
-	virtual bool OnBeforeUnloadDialog(
-		CefRefPtr<CefBrowser> browser,
-		const CefString& message_text,
-		bool is_reload,
-		CefRefPtr<CefJSDialogCallback> callback);
-	virtual void OnResetDialogState(
-		CefRefPtr<CefBrowser> browser);
+	virtual bool OnJSDialog(CefRefPtr<CefBrowser> browser, const CefString& origin_url, const CefString& accept_lang, JSDialogType dialog_type, const CefString& message_text, const CefString& default_prompt_text, CefRefPtr<CefJSDialogCallback> callback, bool& suppress_message);
+	virtual bool OnBeforeUnloadDialog(CefRefPtr<CefBrowser> browser, const CefString& message_text, bool is_reload, CefRefPtr<CefJSDialogCallback> callback);
+	virtual void OnResetDialogState(CefRefPtr<CefBrowser> browser);
 
 	// CefKeyboardHandler methods
-	virtual bool OnPreKeyEvent(
-		CefRefPtr<CefBrowser> browser,
-		const CefKeyEvent& event,
-		CefEventHandle os_event,
-		bool* is_keyboard_shortcut);
+	virtual bool OnPreKeyEvent(CefRefPtr<CefBrowser> browser, const CefKeyEvent& event, CefEventHandle os_event, bool* is_keyboard_shortcut);
 
 	// CefLifeSpanHandler methods:
-	virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		const CefString& target_url,
-		const CefString& target_frame_name,
-		CefLifeSpanHandler::WindowOpenDisposition target_disposition,
-		bool user_gesture,
-		const CefPopupFeatures& popupFeatures,
-		CefWindowInfo& windowInfo,
-		CefRefPtr<CefClient>& client,
-		CefBrowserSettings& settings,
-		bool* no_javascript_access);
+	virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, const CefString& target_frame_name, CefLifeSpanHandler::WindowOpenDisposition target_disposition, bool user_gesture, const CefPopupFeatures& popupFeatures, CefWindowInfo& windowInfo, CefRefPtr<CefClient>& client, CefBrowserSettings& settings, bool* no_javascript_access);
 
 	virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser);
 	virtual bool DoClose(CefRefPtr<CefBrowser> browser);
 	virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser);
 
 	// CefLoadHandler methods
-	virtual void OnLoadingStateChange(
-		CefRefPtr<CefBrowser> browser,
-		bool isLoading,
-		bool canGoBack,
-		bool canGoForward);
-	virtual void OnLoadStart(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame);
-	virtual void OnLoadEnd(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		int httpStatusCode);
-	virtual void OnLoadError(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		ErrorCode errorCode,
-		const CefString& errorText,
-		const CefString& failedUrl);
+	virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward);
+	virtual void OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame);
+	virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode);
+	virtual void OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, ErrorCode errorCode, const CefString& errorText, const CefString& failedUrl);
 
 	// CefRequestHandler methods
-	virtual bool OnBeforeBrowse(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		CefRefPtr<CefRequest> request,
-		bool is_redirect);
-	virtual bool OnOpenURLFromTab(CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		const CefString& target_url,
-		CefRequestHandler::WindowOpenDisposition target_disposition,
-		bool user_gesture);
-	virtual CefRefPtr<CefResourceHandler> GetResourceHandler(
-		CefRefPtr<CefBrowser> browser,
-		CefRefPtr<CefFrame> frame,
-		CefRefPtr<CefRequest> request);
-	virtual bool OnQuotaRequest(
-		CefRefPtr<CefBrowser> browser,
-		const CefString& origin_url,
-		int64 new_size,
-		CefRefPtr<CefRequestCallback> callback);
-	virtual void OnProtocolExecution(
-		CefRefPtr<CefBrowser> browser,
-		const CefString& url,
-		bool& allow_os_execution);
-	virtual void OnRenderProcessTerminated(
-		CefRefPtr<CefBrowser> browser,
-		TerminationStatus status);
+	virtual bool OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefRequest> request, bool is_redirect);
+	virtual bool OnOpenURLFromTab(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, CefRequestHandler::WindowOpenDisposition target_disposition, bool user_gesture);
+	virtual CefRefPtr<CefResourceHandler> GetResourceHandler(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefRequest> request);
+	virtual bool OnQuotaRequest(CefRefPtr<CefBrowser> browser, const CefString& origin_url, int64 new_size, CefRefPtr<CefRequestCallback> callback);
+	virtual void OnProtocolExecution(CefRefPtr<CefBrowser> browser, const CefString& url, bool& allow_os_execution);
+	virtual void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser, TerminationStatus status);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -258,12 +160,9 @@ public:
 
 	bool TriggerEvent(const CefRefPtr<CefProcessMessage> msg);
 
-	bool ResponseQuery(int64_t query,
-		bool success, const CefString& response, int error);
+	bool ResponseQuery(int64_t query, bool success, const CefString& response, int error);
 
-	bool DispatchNotifyRequest(CefRefPtr<CefBrowser> browser,
-		CefProcessId source_process,
-		CefRefPtr<CefProcessMessage> message);
+	bool DispatchNotifyRequest(CefRefPtr<CefBrowser> browser, CefProcessId source_process, CefRefPtr<CefProcessMessage> message);
 
 private:
 	int browser_count_;
@@ -279,7 +178,7 @@ private:
 
 	//MessageHandlerSet message_handler_set_;
 	QCefQueryHandler* cefquery_handler_;
-	
+
 	// List of existing browser windows. Only accessed on the CEF UI thread.
 	BrowserList popup_browser_list_;
 
@@ -300,9 +199,17 @@ private:
 
 	virtual CefRequestHandler::ReturnValue OnBeforeResourceLoad(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefRequest> request, CefRefPtr<CefRequestCallback> callback);
 
-//	virtual bool OnResourceResponse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefRequest> request, CefRefPtr<CefResponse> response);
+	//	virtual bool OnResourceResponse(CefRefPtr<CefBrowser> browser,CefRefPtr<CefFrame> frame,CefRefPtr<CefRequest> request,CefRefPtr<CefResponse> response);
 
 	virtual void OnResourceLoadComplete(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefRequest> request, CefRefPtr<CefResponse> response, URLRequestStatus status, int64 received_content_length);
+
+	virtual void OnDraggableRegionsChanged(CefRefPtr<CefBrowser> browser, const std::vector<CefDraggableRegion>& regions);
+
+	virtual void OnTakeFocus(CefRefPtr<CefBrowser> browser, bool next);
+
+	virtual bool OnSetFocus(CefRefPtr<CefBrowser> browser, FocusSource source);
+
+	virtual void OnGotFocus(CefRefPtr<CefBrowser> browser);
 
 };
 

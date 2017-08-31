@@ -15,7 +15,7 @@
 #include <include/wrapper/cef_helpers.h>
 #pragma endregion cef_headers
 
-#include "../../inc/QCefView.h"
+#include "inc/QCefView.h"
 #include "../../CCefWindow.h"
 #include "QCefViewDefaultSchemeHandler.h"
 

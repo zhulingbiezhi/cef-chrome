@@ -135,3 +135,8 @@ void CCefWindow::GetAllCookie(QList<TCefCookie>& cookieList)
 	CCookieManager::getInstance().getAllCookie(cookieList);
 }
 
+void CCefWindow::Close()
+{
+	CCefManager::getInstance().ReleaseBrowserRefCount();
+}
+

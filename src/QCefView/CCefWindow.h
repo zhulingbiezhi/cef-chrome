@@ -50,6 +50,8 @@ public:
 	*/
 	void GetAllCookie(QList<TCefCookie>& cookieList);
 
+
+	void Close();
 protected:
 	void updateCefBrowserWindow();
 	virtual void exposeEvent(QExposeEvent *e);

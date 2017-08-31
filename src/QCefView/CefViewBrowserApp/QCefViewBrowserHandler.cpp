@@ -35,6 +35,7 @@ bool QCefViewBrowserHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> brow
 	CefRefPtr<CefProcessMessage> message)
 {
 	CEF_REQUIRE_UI_THREAD();
+	qDebug() << __FUNCTION__ << QString::fromStdString(message->GetName().ToString());
 	if (message_router_->OnProcessMessageReceived(
 		browser, source_process, message))
 	{
@@ -56,23 +57,32 @@ void QCefViewBrowserHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,
 {
 	CEF_REQUIRE_UI_THREAD();
 	qDebug() << __FUNCTION__;
-
-	std::list<_contextMenuInfo> infoList = hostWidget_->getMenuItems();
-	if (infoList.size() == 0) {
-		return;
-	}
-	model->Clear();
-	infoList.sort([](const _contextMenuInfo & a, const _contextMenuInfo & b) { return a.index < b.index; });
-
-	for (std::list<_contextMenuInfo>::iterator it = infoList.begin(); it != infoList.end();)
+	int index = 0;
+	int command = 0;
+	bool enable = true;
+	QString lblName;
+	bool  ret = false;
+		
+	while (true && index < 10)
 	{
-		_contextMenuInfo info = *it;
-		model->AddItem(info.command, info.lableName.toLatin1().data());
-		model->SetEnabled(info.command, info.enable);
-		if (++it != infoList.end())
+		ret = hostWidget_->getMenuInfo(index, command, lblName, enable);
+		if (!ret)
+		{
+			index++;
+			continue;
+		}
+		if (index == 0)
+		{
+			model->Clear();
+		}
+		else
 		{
 			model->AddSeparator();
-		}				
+		}
+
+		model->AddItem(command, (wchar_t*)lblName.utf16());
+		model->SetEnabled(command, enable);
+		index++;
 	}
 }
 
@@ -83,8 +93,11 @@ bool QCefViewBrowserHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
 {
 	CEF_REQUIRE_UI_THREAD();
 	qDebug() << __FUNCTION__;
-	std::list<_contextMenuInfo> infoList = hostWidget_->getMenuItems();
-	if (infoList.size() == 0) 
+	int index = 0;
+	int command = 0;
+	bool enable = true;
+	QString lblName;
+	if (!hostWidget_->getMenuInfo(index, command, lblName, enable))
 	{
 		return true;
 	}
@@ -92,8 +105,6 @@ bool QCefViewBrowserHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
 	{
 		return hostWidget_->excContextMenu(command_id);
 	}
-
-	
 }
 
 //bool QCefViewHandler::OnFileDialog(CefRefPtr<CefBrowser> browser, 
@@ -132,7 +143,7 @@ bool QCefViewBrowserHandler::OnConsoleMessage(CefRefPtr<CefBrowser> browser,
 	int line)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	
 	if (source.empty() || message.empty())
 	{
 		return false;
@@ -143,7 +154,7 @@ bool QCefViewBrowserHandler::OnConsoleMessage(CefRefPtr<CefBrowser> browser,
 	{
 		src = src.substr(found + 1);
 	}
-	__noop(src, message.ToString());
+	qDebug() << __FUNCTION__ << QString::fromStdString(src) << QString::fromStdString(message.ToString());
 	return false;
 }
 
@@ -170,8 +181,12 @@ bool QCefViewBrowserHandler::OnDragEnter(CefRefPtr<CefBrowser> browser,
 	CefDragHandler::DragOperationsMask mask)
 {
 	CEF_REQUIRE_UI_THREAD();
-
-	return true;
+	std::vector<CefString> names;
+	dragData->GetFileNames(names);
+	QString url = QString::fromStdString(names[0].ToString());
+	qDebug() << __FUNCTION__ << url;
+	hostWidget_->navigateToUrl(url);
+	return false;
 }
 
 //bool QCefViewHandler::OnRequestGeolocationPermission(CefRefPtr<CefBrowser> browser, 
@@ -220,13 +235,18 @@ bool QCefViewBrowserHandler::OnPreKeyEvent(CefRefPtr<CefBrowser> browser,
 	bool* is_keyboard_shortcut)
 {
 	CEF_REQUIRE_UI_THREAD();
-	if (event.type == KEYEVENT_RAWKEYDOWN && event.windows_key_code == VK_ESCAPE)
+	if (event.windows_key_code == VK_RETURN)
 	{
-		CefRefPtr<CefFrame> frame = browser->GetMainFrame();
-		frame->ExecuteJavaScript("{document.webkitExitFullscreen()}", frame->GetURL(), 0);
-		return true;
+		return true;   //ignore the key code
 	}
-	return false;
+	else
+	{
+		if (event.windows_key_code == VK_ESCAPE)			//the key will deal with onKeyEvent
+		{
+			*is_keyboard_shortcut = true;
+		}
+		return false;
+	}
 }
 
 bool QCefViewBrowserHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser,
@@ -279,7 +299,7 @@ void QCefViewBrowserHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 			::MoveWindow(browser->GetHost()->GetWindowHandle(),
 				rc.left(), rc.top(), rc.width(), rc.height(), TRUE);
 		}
-		qDebug() << __FUNCTION__ << "get browser handler sucess !";
+		//qDebug() << __FUNCTION__ << "get browser handler sucess !";
 	}
 	else if (browser->IsPopup())
 	{
@@ -503,8 +523,8 @@ void QCefViewBrowserHandler::CloseAllBrowsers(bool force_close)
 	if (!CefCurrentlyOn(TID_UI))
 	{
 		// Execute on the UI thread.
-		CefPostTask(TID_UI,
-			NewCefRunnableMethod(this, &QCefViewBrowserHandler::CloseAllBrowsers, force_close));
+		qDebug() << __FUNCTION__ << "warning : close browsers is not on UI_Thread";
+		CefPostTask(TID_UI, NewCefRunnableMethod(this, &QCefViewBrowserHandler::CloseAllBrowsers, force_close));
 		return;
 	}
 
@@ -550,7 +570,7 @@ bool QCefViewBrowserHandler::TriggerEvent(const CefRefPtr<CefProcessMessage> msg
 	{
 		return false;
 	}
-
+	qDebug() << __FUNCTION__ << "send msg to render process----" << QString::fromStdString(msg->GetName().ToString());
 	CefRefPtr<CefBrowser> browser = GetBrowser();
 	if (browser)
 	{
@@ -574,7 +594,7 @@ bool QCefViewBrowserHandler::DispatchNotifyRequest(CefRefPtr<CefBrowser> browser
 	CefProcessId source_process,
 	CefRefPtr<CefProcessMessage> message)
 {
-	qDebug() << __FUNCTION__ << source_process << QString::fromStdString(message->GetName().ToString());
+	//qDebug() << __FUNCTION__ << source_process << QString::fromStdString(message->GetName().ToString());
 	if (hostWidget_ && message->GetName() == INVOKEMETHOD_NOTIFY_MESSAGE)
 	{
 		CefRefPtr<CefListValue> messageArguments = message->GetArgumentList();
@@ -603,7 +623,8 @@ bool QCefViewBrowserHandler::DispatchNotifyRequest(CefRefPtr<CefBrowser> browser
 							#endif
 						}
 
-						QVariantList arguments;
+						QVariantList arguments;						
+
 						QString qStr;
 						for (idx; idx < messageArguments->GetSize(); idx++)
 						{
@@ -643,46 +664,86 @@ bool QCefViewBrowserHandler::DispatchNotifyRequest(CefRefPtr<CefBrowser> browser
 								__noop(_T("QCefView"), _T("Unknow Type!"));
 							}
 						}
+						int maxArgCnt = 5;
+						for (int i = arguments.size(); i < maxArgCnt; i++)
+						{
+							arguments.push_back(QVariant());
+						}
+						QVariant val1, val2, val3, val4, val5;
 
-						QMetaObject::invokeMethod(hostWidget_,
-							"onInvokeMethodNotify",
-							Qt::QueuedConnection,
-							Q_ARG(const QString, method),
-							Q_ARG(const QVariantList, arguments));
-
+						qSwap(val1,arguments[0]);
+						qSwap(val2,arguments[1]);
+						qSwap(val3,arguments[2]);
+						qSwap(val4,arguments[3]);
+						qSwap(val5,arguments[4]);
+						
+						if (hostWidget_.data()->getInvoker() != nullptr)
+						{
+							QMetaObject::invokeMethod(reinterpret_cast<QObject*>(hostWidget_.data()->getInvoker()),
+								method.toLatin1().data(),
+								Qt::QueuedConnection,
+								QGenericArgument(val1.typeName(), val1.data()),
+								QGenericArgument(val2.typeName(), val2.data()),
+								QGenericArgument(val3.typeName(), val3.data()),
+								QGenericArgument(val4.typeName(), val4.data()),
+								QGenericArgument(val5.typeName(), val5.data()));
+						}
+						else
+						{
+							qDebug() << __FUNCTION__ << "invoke error : the invoker is empty, please use the function 'registerInvoker' of QCefview first";
+						}
 						return true;
 						}
 					}
 				}
 		}
 	}
-
 	return false;
 }
 
 void QCefViewBrowserHandler::OnFullscreenModeChange(CefRefPtr<CefBrowser> browser, bool fullscreen)
 {
+	CEF_REQUIRE_UI_THREAD();
 	qDebug() << __FUNCTION__;
-	HWND hwndBrowser = browser->GetHost()->GetWindowHandle();
-
-	ShowWindow(browser->GetHost()->GetWindowHandle(), fullscreen ? SW_MAXIMIZE : SW_RESTORE);
+	QMetaObject::invokeMethod(hostWidget_,
+		"onFullScreen",
+		Qt::QueuedConnection,
+		Q_ARG(const bool&, fullscreen));
 }
 
 void QCefViewBrowserHandler::OnStatusMessage(CefRefPtr<CefBrowser> browser, const CefString& value)
 {
+	CEF_REQUIRE_UI_THREAD();
 	qDebug() << __FUNCTION__ << QString::fromStdString(value.ToString());
 	//throw std::logic_error("The method or operation is not implemented.");
 }
 
 bool QCefViewBrowserHandler::OnKeyEvent(CefRefPtr<CefBrowser> browser, const CefKeyEvent& event, CefEventHandle os_event)
 {
-	qDebug() << __FUNCTION__;
+	CEF_REQUIRE_UI_THREAD();
+	int key = event.windows_key_code;
+	qDebug() << __FUNCTION__ << key;
+	if (event.type == KEYEVENT_RAWKEYDOWN)
+	{
+		if (event.windows_key_code == VK_ESCAPE)
+		{
+			CefRefPtr<CefFrame> frame = browser->GetMainFrame();
+			frame->ExecuteJavaScript("{document.webkitExitFullscreen()}", frame->GetURL(), 0);
+			return true;
+		}
+		QMetaObject::invokeMethod(hostWidget_,
+			"onKeyEvent",
+			Qt::QueuedConnection,
+			Q_ARG(const int&, key)
+			);
+	}
+	
 	return true;
-	//throw std::logic_error("The method or operation is not implemented.");
 }
  
 bool QCefViewBrowserHandler::OnRequestGeolocationPermission(CefRefPtr<CefBrowser> browser, const CefString& requesting_url, int request_id, CefRefPtr<CefGeolocationCallback> callback)
 {
+	CEF_REQUIRE_UI_THREAD();
 	qDebug() << __FUNCTION__;
 	return true;
 	//throw std::logic_error("The method or operation is not implemented.");
@@ -690,12 +751,14 @@ bool QCefViewBrowserHandler::OnRequestGeolocationPermission(CefRefPtr<CefBrowser
 
 void QCefViewBrowserHandler::OnCancelGeolocationPermission(CefRefPtr<CefBrowser> browser, int request_id)
 {
+	CEF_REQUIRE_UI_THREAD();
 	//throw std::logic_error("The method or operation is not implemented.");
 	qDebug() << __FUNCTION__;
 }
 
 void QCefViewBrowserHandler::OnDialogClosed(CefRefPtr<CefBrowser> browser)
 {
+	CEF_REQUIRE_UI_THREAD();
 	//throw std::logic_error("The method or operation is not implemented.");
 	qDebug() << __FUNCTION__;
 }
@@ -716,8 +779,37 @@ CefRequestHandler::ReturnValue QCefViewBrowserHandler::OnBeforeResourceLoad(CefR
 
 void QCefViewBrowserHandler::OnResourceLoadComplete(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefRequest> request, CefRefPtr<CefResponse> response, URLRequestStatus status, int64 received_content_length)
 {
-	CefRequest::HeaderMap headMaps;
+	//CefRequest::HeaderMap headMaps;
 
 	//throw std::logic_error("The method or operation is not implemented.");
 	//qDebug() << __FUNCTION__ << QString::fromStdString(request->GetURL().ToString()) << received_content_length;
+}
+
+void QCefViewBrowserHandler::OnDraggableRegionsChanged(CefRefPtr<CefBrowser> browser, const std::vector<CefDraggableRegion>& regions)
+{
+	CEF_REQUIRE_UI_THREAD();
+	//throw std::logic_error("The method or operation is not implemented.");
+
+}
+
+void QCefViewBrowserHandler::OnTakeFocus(CefRefPtr<CefBrowser> browser, bool next)
+{
+	CEF_REQUIRE_UI_THREAD();
+	//throw std::logic_error("The method or operation is not implemented.");
+	qDebug() << __FUNCTION__ << next;
+}
+
+bool QCefViewBrowserHandler::OnSetFocus(CefRefPtr<CefBrowser> browser, FocusSource source)
+{
+	CEF_REQUIRE_UI_THREAD();
+	//throw std::logic_error("The method or operation is not implemented.");
+	qDebug() << __FUNCTION__ ;
+	return false;
+}
+
+void QCefViewBrowserHandler::OnGotFocus(CefRefPtr<CefBrowser> browser)
+{
+	CEF_REQUIRE_UI_THREAD();
+	qDebug() << __FUNCTION__;
+	//throw std::logic_error("The method or operation is not implemented.");
 }

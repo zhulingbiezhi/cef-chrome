@@ -6,7 +6,7 @@
 #include <include/wrapper/cef_message_router.h>
 #pragma endregion cef_headers
 
-#include "../inc/QCefView.h"
+#include "inc/QCefView.h"
 #include "../CCefWindow.h"
 
 class QCefQueryHandler 
