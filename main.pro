@@ -8,7 +8,7 @@ message("attention---QCefView.dll depend on libcef_dll_wrapper.lib and libcef.li
 
 TEMPLATE = subdirs
 CONFIG += ordered 
-SUBDIRS += src/QCefView \
-	src/QCefViewHelper \
-    src/QCefViewTest \
+SUBDIRS += sourceCode/QCefView \
+	sourceCode/QCefViewHelper \
+    sourceCode/QCefViewTest \
 	

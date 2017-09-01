@@ -1,8 +1,8 @@
 @echo off
 set CurDir=%~dp0
-set QCefViewDir=%CurDir%\src\QCefView\
-set QCefViewHelperDir=%CurDir%\src\QCefViewHelper\
-set QCefViewTestDir=%CurDir%\src\QCefViewTest\
+set QCefViewDir=%CurDir%\sourceCode\QCefView\
+set QCefViewHelperDir=%CurDir%\sourceCode\QCefViewHelper\
+set QCefViewTestDir=%CurDir%\sourceCode\QCefViewTest\
 
 
 echo qmake QCefView start...
