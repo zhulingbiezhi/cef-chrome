@@ -29,10 +29,18 @@ void QCefDisplayHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefS
 
 void QCefDisplayHandler::OnFullscreenModeChange(CefRefPtr<CefBrowser> browser, bool fullscreen)
 {
+	CEF_REQUIRE_UI_THREAD();
+	qDebug() << __FUNCTION__;
+	QMetaObject::invokeMethod(m_pBrowserHandler->hostWidget_,
+		"onFullScreen",
+		Qt::QueuedConnection,
+		Q_ARG(const bool&, fullscreen));
 }
 
 void QCefDisplayHandler::OnStatusMessage(CefRefPtr<CefBrowser> browser, const CefString& value)
 {
+	CEF_REQUIRE_UI_THREAD();
+	qDebug() << __FUNCTION__ << QString::fromStdString(value.ToString());
 }
 
 bool QCefDisplayHandler::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line)
