@@ -17,7 +17,7 @@
 
 CCefCookie::CCefCookie()
 {
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	mpGetManagerCallback = new CCefCompletionCallback();
 	mpCookieManager = CefCookieManager::GetGlobalManager(mpGetManagerCallback.get());
 	mpSetCookieCall = new CCefSetCookieCallback();
@@ -170,5 +170,5 @@ CCefCompletionCallback::~CCefCompletionCallback()
 
 void CCefCompletionCallback::OnComplete()
 {
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 }

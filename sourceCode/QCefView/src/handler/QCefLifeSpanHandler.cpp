@@ -10,13 +10,13 @@ QCefLifeSpanHandler::QCefLifeSpanHandler(QCefViewBrowserHandler * pBrowserHandle
 
 QCefLifeSpanHandler::~QCefLifeSpanHandler()
 {
-
+	
 }
 
 bool QCefLifeSpanHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, const CefString& target_frame_name, WindowOpenDisposition target_disposition, bool user_gesture, const CefPopupFeatures& popupFeatures, CefWindowInfo& windowInfo, CefRefPtr<CefClient>& client, CefBrowserSettings& settings, bool* no_javascript_access)
 {
 	CEF_REQUIRE_IO_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	// redirect all popup page into the source frame forcefully
 	frame->LoadURL(target_url);
 
@@ -27,7 +27,7 @@ bool QCefLifeSpanHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser, CefRefPtr
 void QCefLifeSpanHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 {
 	CEF_REQUIRE_UI_THREAD();
-
+	DEBUG_FUNC();
 	if (!m_pBrowserHandler->message_router_)
 	{
 		// Create the browser-side router for query handling.
@@ -71,7 +71,7 @@ void QCefLifeSpanHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 bool QCefLifeSpanHandler::DoClose(CefRefPtr<CefBrowser> browser)
 {
 	CEF_REQUIRE_UI_THREAD();
-
+	DEBUG_FUNC();
 	// Closing the main window requires special handling. See the DoClose()
 	// documentation in the CEF header for a detailed description of this
 	// process.
@@ -87,9 +87,9 @@ bool QCefLifeSpanHandler::DoClose(CefRefPtr<CefBrowser> browser)
 }
 
 void QCefLifeSpanHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
-{
+{	
 	CEF_REQUIRE_UI_THREAD();
-
+	DEBUG_FUNC();
 	m_pBrowserHandler->message_router_->OnBeforeClose(browser);
 
 	if (m_pBrowserHandler->GetBrowserId() == browser->GetIdentifier())
@@ -125,5 +125,6 @@ void QCefLifeSpanHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 		delete m_pBrowserHandler->cefquery_handler_;
 		m_pBrowserHandler->cefquery_handler_ = NULL;
 		m_pBrowserHandler->message_router_ = NULL;
+		CefQuitMessageLoop();
 	}
 }

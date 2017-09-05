@@ -47,7 +47,7 @@ CefRefPtr<CefBrowserProcessHandler> QCefViewBrowserApp::GetBrowserProcessHandler
 void QCefViewBrowserApp::OnContextInitialized()
 {
 	CEF_REQUIRE_UI_THREAD();
-
+	DEBUG_FUNC();
 	// create all browser delegates
 	CreateBrowserDelegates(browser_delegates_);
 
@@ -73,6 +73,7 @@ void QCefViewBrowserApp::OnContextInitialized()
 void QCefViewBrowserApp::OnBeforeChildProcessLaunch(
 	CefRefPtr<CefCommandLine> command_line)
 {
+	DEBUG_FUNC();
 	BrowserDelegateSet::iterator it = browser_delegates_.begin();
 	for (; it != browser_delegates_.end(); ++it)
 	{
@@ -84,6 +85,7 @@ void QCefViewBrowserApp::OnRenderProcessThreadCreated(
 	CefRefPtr<CefListValue> extra_info)
 {
 	CEF_REQUIRE_IO_THREAD();
+	DEBUG_FUNC();
 	BrowserDelegateSet::iterator it = browser_delegates_.begin();
 	for (; it != browser_delegates_.end(); ++it)
 	{

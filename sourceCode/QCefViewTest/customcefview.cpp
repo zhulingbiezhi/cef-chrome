@@ -13,7 +13,7 @@ CustomCefView::CustomCefView(const QString& url, QWidget *parent)
 
 CustomCefView::~CustomCefView()
 {
-
+	qDebug() << __FUNCTION__;
 }
 
 void CustomCefView::changeColor()

@@ -9,12 +9,12 @@ QCefDialogHandler::QCefDialogHandler(QCefViewBrowserHandler * pBrowserHandler)
 
 QCefDialogHandler::~QCefDialogHandler()
 {
-
+	
 }
 
 bool QCefDialogHandler::OnFileDialog(CefRefPtr<CefBrowser> browser, FileDialogMode mode, const CefString& title, const CefString& default_file_path, const std::vector<CefString>& accept_filters, int selected_accept_filter, CefRefPtr<CefFileDialogCallback> callback)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	return false;
 }

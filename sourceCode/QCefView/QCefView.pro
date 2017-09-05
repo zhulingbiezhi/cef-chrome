@@ -7,7 +7,8 @@ TARGET = QCefView
 QT += core widgets gui
 CONFIG  -= flat
 
-DEFINES += QCEFVIEW_LIB
+DEFINES += QCEFVIEW_LIB 
+DEFINES += DEBUG_FUNCTION
 
 INCLUDEPATH +=  ../../dep/cef ../../QCefViewSDK ./src ./src/handler ./src/main 
    

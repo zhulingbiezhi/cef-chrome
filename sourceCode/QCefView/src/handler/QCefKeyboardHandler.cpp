@@ -15,6 +15,7 @@ QCefKeyboardHandler::~QCefKeyboardHandler()
 bool QCefKeyboardHandler::OnPreKeyEvent(CefRefPtr<CefBrowser> browser, const CefKeyEvent& event, CefEventHandle os_event, bool* is_keyboard_shortcut)
 {
 	CEF_REQUIRE_UI_THREAD();
+	DEBUG_FUNC();
 	if (event.windows_key_code == VK_RETURN)
 	{
 		return true;   //ignore the key code

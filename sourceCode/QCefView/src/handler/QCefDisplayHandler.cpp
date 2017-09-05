@@ -15,6 +15,7 @@ QCefDisplayHandler::~QCefDisplayHandler()
 void QCefDisplayHandler::OnAddressChange(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& url) 
 {
 	CEF_REQUIRE_UI_THREAD();
+	DEBUG_FUNC();
 	QMetaObject::invokeMethod(m_pBrowserHandler->hostWidget_,
 		"onUrlChange",
 		Qt::QueuedConnection,
@@ -24,13 +25,13 @@ void QCefDisplayHandler::OnAddressChange(CefRefPtr<CefBrowser> browser, CefRefPt
 void QCefDisplayHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 }
 
 void QCefDisplayHandler::OnFullscreenModeChange(CefRefPtr<CefBrowser> browser, bool fullscreen)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	QMetaObject::invokeMethod(m_pBrowserHandler->hostWidget_,
 		"onFullScreen",
 		Qt::QueuedConnection,
@@ -46,7 +47,6 @@ void QCefDisplayHandler::OnStatusMessage(CefRefPtr<CefBrowser> browser, const Ce
 bool QCefDisplayHandler::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line)
 {
 	CEF_REQUIRE_UI_THREAD();
-
 	if (source.empty() || message.empty())
 	{
 		return false;

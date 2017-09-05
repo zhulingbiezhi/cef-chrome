@@ -74,7 +74,7 @@ void QCefViewBrowserHandler::CloseAllBrowsers(bool force_close)
 		CefPostTask(TID_UI, NewCefRunnableMethod(this, &QCefViewBrowserHandler::CloseAllBrowsers, force_close));
 		return;
 	}
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	CloseAllPopupBrowsers(force_close);
 
 	if (main_browser_.get())

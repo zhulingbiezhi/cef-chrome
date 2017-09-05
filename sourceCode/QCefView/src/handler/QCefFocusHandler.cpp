@@ -15,18 +15,18 @@ QCefFocusHandler::~QCefFocusHandler()
 void QCefFocusHandler::OnTakeFocus(CefRefPtr<CefBrowser> browser, bool next)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__ << next;
+	DEBUG_FUNC();
 }
 
 bool QCefFocusHandler::OnSetFocus(CefRefPtr<CefBrowser> browser, FocusSource source)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	return false;
 }
 
 void QCefFocusHandler::OnGotFocus(CefRefPtr<CefBrowser> browser)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 }

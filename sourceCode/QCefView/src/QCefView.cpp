@@ -47,12 +47,18 @@ QCefView::QCefView(const QString url, QWidget* parent /*= 0*/)
 
 QCefView::~QCefView()
 {
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
+
 }
 
 void QCefView::Close()
 {
 	pCefWindow_->Close();
+}
+
+void QCefView::Run()
+{
+	pCefWindow_->Run();
 }
 
 QCefInvoker* QCefView::getInvoker()
@@ -223,7 +229,7 @@ void QCefView::onLoadError(int errorCode,
 
 void QCefView::onFullScreen(const bool& full)
 {
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	if (full)
 	{
 		this->setWindowFlags(Qt::Window);
@@ -340,7 +346,7 @@ void QCefView::onKeyEvent(const int& key)
 
 bool QCefView::excContextMenu(int id)
 {
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	return false;
 }
 

@@ -58,6 +58,7 @@ public:
 	QCefView(const QString url, QWidget* parent = 0);
 	~QCefView();
 	void  Close();
+	void  Run();
 
 	/** invokerfunction注册实例，只允许注册一个
 	**	QCefInvoker* invoker:	继承于QCefInvoker，传递指针即可

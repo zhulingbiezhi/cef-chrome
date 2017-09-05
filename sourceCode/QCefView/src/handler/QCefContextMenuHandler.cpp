@@ -9,13 +9,13 @@ QCefContextMenuHandler::QCefContextMenuHandler(QCefViewBrowserHandler * pBrowser
 
 QCefContextMenuHandler::~QCefContextMenuHandler()
 {
-
+	
 }
 
 void QCefContextMenuHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, CefRefPtr<CefMenuModel> model)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	int index = 0;
 	int command = 0;
 	bool enable = true;
@@ -48,7 +48,7 @@ void QCefContextMenuHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser, 
 bool QCefContextMenuHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, int command_id, EventFlags event_flags)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__;
+	DEBUG_FUNC();
 	int index = 0;
 	int command = 0;
 	bool enable = true;

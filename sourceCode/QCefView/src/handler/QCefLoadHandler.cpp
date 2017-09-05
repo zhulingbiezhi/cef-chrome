@@ -15,6 +15,7 @@ QCefLoadHandler::~QCefLoadHandler()
 void QCefLoadHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward)
 {
 	CEF_REQUIRE_UI_THREAD();
+	DEBUG_FUNC();
 	if (m_pBrowserHandler->hostWidget_)
 	{
 		//m_pBrowserHandler->hostWidget_->onLoadStateChange(isLoading);
@@ -25,6 +26,7 @@ void QCefLoadHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool i
 void QCefLoadHandler::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame)
 {
 	CEF_REQUIRE_UI_THREAD();
+	DEBUG_FUNC();
 	if (m_pBrowserHandler->hostWidget_)
 	{
 		//m_pBrowserHandler->hostWidget_->onLoadStart();
@@ -35,6 +37,7 @@ void QCefLoadHandler::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFr
 void QCefLoadHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode)
 {
 	CEF_REQUIRE_UI_THREAD();
+	DEBUG_FUNC();
 	if (m_pBrowserHandler->hostWidget_)
 	{
 		qDebug() << __FUNCTION__ << QString::fromStdString(frame->GetURL().ToString());
@@ -46,6 +49,7 @@ void QCefLoadHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFram
 void QCefLoadHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, ErrorCode errorCode, const CefString& errorText, const CefString& failedUrl)
 {
 	CEF_REQUIRE_UI_THREAD();
+	DEBUG_FUNC();
 	if (errorCode == ERR_ABORTED)
 	{
 		return;
