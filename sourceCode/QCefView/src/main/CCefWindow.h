@@ -61,6 +61,7 @@ public:
 	void CreateBrowser(const QString& url);
 
 	void Close();
+	void Run();
 protected:
 	void updateCefBrowserWindow();
 	virtual void exposeEvent(QExposeEvent *e);

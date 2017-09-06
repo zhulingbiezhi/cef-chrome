@@ -17,16 +17,3 @@
 #else
 #define  DEBUG_FUNC()  
 #endif // DEBUG_FUNCTION
-
-// #ifdef DEBUG_INFORMATION
-// #define  DEBUG_INFO(args...)  qDebug() << __FUNCTION__ << args;
-// #else
-// #define  DEBUG_INFO(args...)  qWarning() << __FUNCTION__ << args;
-// #endif // DEBUG_INFORMATION
-
-//#define QCEF_QUERY_NAME						"QCefQuery"
-//#define QCEF_QUERY_CANCEL_NAME				"QCefQueryCancel"
-//#define QCEF_OBJECT_NAME					"QCefClient"
-//#define INVOKEMETHOD_NOTIFY_MESSAGE			"NotifyRequestMessage"
-//#define TRIGGEREVENT_NOTIFY_MESSAGE			"TriggerEventMessage"
-

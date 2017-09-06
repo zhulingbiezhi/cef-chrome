@@ -19,7 +19,11 @@ QCefViewTest::QCefViewTest(QWidget *parent)
 
 QCefViewTest::~QCefViewTest()
 {
-	mpCefview->Close();
+	if (mpCefview)
+	{
+		delete mpCefview;
+	}
+
 }
 
 void QCefViewTest::CreateUI()

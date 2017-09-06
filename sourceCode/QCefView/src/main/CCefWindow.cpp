@@ -180,3 +180,9 @@ void CCefWindow::Close()
 	pQCefViewHandler_->CloseAllBrowsers(false);
 }
 
+void CCefWindow::Run()
+{
+	qDebug() << "CEF start message loop";
+	CefRunMessageLoop();
+	qDebug() << "CEF quit message loop";
+}
