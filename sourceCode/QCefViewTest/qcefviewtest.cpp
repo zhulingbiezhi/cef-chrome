@@ -23,7 +23,6 @@ QCefViewTest::~QCefViewTest()
 	{
 		delete mpCefview;
 	}
-
 }
 
 void QCefViewTest::CreateUI()

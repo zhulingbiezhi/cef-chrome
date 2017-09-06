@@ -46,8 +46,7 @@
 class CCefWindow;
 class QCefInvoker;
 
-class QCEFVIEW_EXPORT QCefView
-	: public QWidget
+class QCEFVIEW_EXPORT QCefView: public QWidget
 {
 	Q_OBJECT
 
@@ -57,7 +56,7 @@ protected slots:
 public:
 	QCefView(const QString url, QWidget* parent = 0);
 	~QCefView();
-	void  Close();
+
 	void  Run();
 
 	/** invokerfunction注册实例，只允许注册一个

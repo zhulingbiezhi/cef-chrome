@@ -41,7 +41,11 @@ void QCefDisplayHandler::OnFullscreenModeChange(CefRefPtr<CefBrowser> browser, b
 void QCefDisplayHandler::OnStatusMessage(CefRefPtr<CefBrowser> browser, const CefString& value)
 {
 	CEF_REQUIRE_UI_THREAD();
-	qDebug() << __FUNCTION__ << QString::fromStdString(value.ToString());
+	QString strValue = QString::fromStdString(value.ToString());
+	if (!strValue.isEmpty())
+	{
+		qDebug() << __FUNCTION__ << strValue;
+	}
 }
 
 bool QCefDisplayHandler::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message, const CefString& source, int line)

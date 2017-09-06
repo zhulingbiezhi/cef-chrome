@@ -12,7 +12,20 @@
 
 #include <QVariant>
 #include "QCefViewBrowserHandler.h"
-#include "QCefQueryHandler.h"
+
+#include "QCefCookieVisitor.h"
+#include "QCefDownloadHandler.h"
+#include "QCefContextMenuHandler.h"
+#include "QCefDisplayHandler.h"
+#include "QCefDragHandler.h"
+#include "QCefFocusHandler.h"
+#include "QCefKeyboardHandler.h"
+#include "QCefLifeSpanHandler.h"
+#include "QCefLoadHandler.h"
+#include "QCefRequestHandler.h"
+#include "QCefDialogHandler.h"
+#include "QCefJSDialogHandler.h"
+
 
 QCefViewBrowserHandler::QCefViewBrowserHandler(QCefView* host)
 	: is_closing_(false)
@@ -26,6 +39,67 @@ QCefViewBrowserHandler::QCefViewBrowserHandler(QCefView* host)
 
 QCefViewBrowserHandler::~QCefViewBrowserHandler()
 {
+	DEBUG_FUNC();
+}
+
+CefRefPtr<CefContextMenuHandler> QCefViewBrowserHandler::GetContextMenuHandler()
+{
+	return new QCefContextMenuHandler(this);
+}
+
+CefRefPtr<CefDialogHandler> QCefViewBrowserHandler::GetDialogHandler()
+{
+	return new QCefDialogHandler(this);
+}
+
+CefRefPtr<CefDisplayHandler> QCefViewBrowserHandler::GetDisplayHandler()
+{
+	return new QCefDisplayHandler(this);
+}
+
+CefRefPtr<CefDownloadHandler> QCefViewBrowserHandler::GetDownloadHandler()
+{
+	return new QCefDownloadHandler(this);
+}
+
+CefRefPtr<CefDragHandler> QCefViewBrowserHandler::GetDragHandler()
+{
+	return new QCefDragHandler(this);
+}
+
+CefRefPtr<CefJSDialogHandler> QCefViewBrowserHandler::GetJSDialogHandler()
+{
+	return new QCefJSDialogHandler(this);
+}
+
+CefRefPtr<CefKeyboardHandler> QCefViewBrowserHandler::GetKeyboardHandler()
+{
+	return new QCefKeyboardHandler(this);
+}
+
+CefRefPtr<CefLifeSpanHandler> QCefViewBrowserHandler::GetLifeSpanHandler()
+{
+	return new QCefLifeSpanHandler(this);
+}
+
+CefRefPtr<CefLoadHandler> QCefViewBrowserHandler::GetLoadHandler()
+{
+	return new QCefLoadHandler(this);
+}
+
+CefRefPtr<CefRequestHandler> QCefViewBrowserHandler::GetRequestHandler()
+{
+	return new QCefRequestHandler(this);
+}
+
+CefMessageRouterBrowserSide::Handler* QCefViewBrowserHandler::GetCefQueryHandler()
+{
+	std::string name = CLASS_NAME(CefMessageRouterBrowserSide::Handler);
+	if (mCefViewHandleMap.find(name) == mCefViewHandleMap.end())
+	{
+		mCefViewHandleMap[name] = new QCefQueryHandler(this->hostWidget_);
+	}
+	return static_cast<QCefQueryHandler*>(mCefViewHandleMap[name]);
 }
 
 bool QCefViewBrowserHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
@@ -34,8 +108,7 @@ bool QCefViewBrowserHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> brow
 {
 	CEF_REQUIRE_UI_THREAD();
 	qDebug() << __FUNCTION__ << QString::fromStdString(message->GetName().ToString());
-	if (message_router_->OnProcessMessageReceived(
-		browser, source_process, message))
+	if (message_router_->OnProcessMessageReceived(browser, source_process, message))
 	{
 		return true;
 	}
@@ -76,7 +149,7 @@ void QCefViewBrowserHandler::CloseAllBrowsers(bool force_close)
 	}
 	DEBUG_FUNC();
 	CloseAllPopupBrowsers(force_close);
-
+	CefClearSchemeHandlerFactories();
 	if (main_browser_.get())
 	{
 		// Request that the main browser close.

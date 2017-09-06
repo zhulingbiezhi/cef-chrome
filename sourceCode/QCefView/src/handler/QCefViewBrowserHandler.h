@@ -13,35 +13,25 @@
 #include "include/wrapper/cef_message_router.h"
 #include "include/cef_request_handler.h"
 #include "inc/QCefView.h"
-
 #include "QCefQueryHandler.h"
-#include "QCefCookieVisitor.h"
-#include "QCefDownloadHandler.h"
-#include "QCefContextMenuHandler.h"
-#include "QCefDisplayHandler.h"
-#include "QCefDragHandler.h"
-#include "QCefFocusHandler.h"
-#include "QCefKeyboardHandler.h"
-#include "QCefLifeSpanHandler.h"
-#include "QCefLoadHandler.h"
-#include "QCefRequestHandler.h"
-#include "QCefDialogHandler.h"
-#include "QCefJSDialogHandler.h"
 
+#define CLASS_NAME(class_name) #class_name
 
-// class QCefQueryHandler;
-// class QCefCookieVisitor;
-// class QCefDownloadHandler;
-// class QCefContextMenuHandler;
-// class QCefDisplayHandler;
-// class QCefDragHandler;
-// class QCefFocusHandler;
-// class QCefKeyboardHandler;
-// class QCefLifeSpanHandler;
-// class QCefLoadHandler;
-// class QCefRequestHandler;
-// class QCefDialogHandler;
-// class QCefJSDialogHandler;
+class ICefViewBrowser;
+class QCefQueryHandler;
+class QCefCookieVisitor;
+class QCefDownloadHandler;
+class QCefContextMenuHandler;
+class QCefDisplayHandler;
+class QCefDragHandler;
+class QCefFocusHandler;
+class QCefKeyboardHandler;
+class QCefLifeSpanHandler;
+class QCefLoadHandler;
+class QCefRequestHandler;
+class QCefDialogHandler;
+class QCefJSDialogHandler;
+
 
 class QCefViewBrowserHandler : public CefClient
 {
@@ -55,60 +45,32 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	// CefClient methods:
-	virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler()
-	{
-		return new QCefContextMenuHandler(this);
-	}
+	virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler();
 
-	virtual CefRefPtr<CefDialogHandler> GetDialogHandler()
-	{
-		return new QCefDialogHandler(this);
-	}
+	virtual CefRefPtr<CefDialogHandler> GetDialogHandler();
 
-	virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler()
-	{
-		return new QCefDisplayHandler(this);
-	}
+	virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler();
 
-	virtual CefRefPtr<CefDownloadHandler> GetDownloadHandler()
-	{
-		return new QCefDownloadHandler(this);
-	}
+	virtual CefRefPtr<CefDownloadHandler> GetDownloadHandler();
 
-	virtual CefRefPtr<CefDragHandler> GetDragHandler()
-	{
-		return new QCefDragHandler(this);
-	}
+	virtual CefRefPtr<CefDragHandler> GetDragHandler();
 
-	virtual CefRefPtr<CefJSDialogHandler> GetJSDialogHandler()
-	{
-		return new QCefJSDialogHandler(this);
-	}
+	virtual CefRefPtr<CefJSDialogHandler> GetJSDialogHandler();
 
-	virtual CefRefPtr<CefKeyboardHandler> GetKeyboardHandler()
-	{
-		return new QCefKeyboardHandler(this);
-	}
+	virtual CefRefPtr<CefKeyboardHandler> GetKeyboardHandler();
 
-	virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler()
-	{
-		return new QCefLifeSpanHandler(this);
-	}
+	virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler();
 
-	virtual CefRefPtr<CefLoadHandler> GetLoadHandler()
-	{
-		return new QCefLoadHandler(this);
-	}
+	virtual CefRefPtr<CefLoadHandler> GetLoadHandler();
 
-	virtual CefRefPtr<CefRequestHandler> GetRequestHandler()
-	{
-		return new QCefRequestHandler(this);
-	}
+	virtual CefRefPtr<CefRequestHandler> GetRequestHandler();
 
-	virtual CefRefPtr<CefCookieVisitor> GetCookieHandler()
-	{
-		return new QCefCookieVisitor();
-	}
+// 	virtual CefRefPtr<CefCookieVisitor> GetCookieHandler()
+// 	{
+// 		return new QCefCookieVisitor();
+//  	}
+
+	virtual CefMessageRouterBrowserSide::Handler* GetCefQueryHandler();
 
 	virtual bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser, CefProcessId source_process, CefRefPtr<CefProcessMessage> message);
 
@@ -145,6 +107,8 @@ private:
 
 	//MessageHandlerSet message_handler_set_;
 	QCefQueryHandler* cefquery_handler_;
+
+	std::map<std::string, ICefViewBrowser*> mCefViewHandleMap;
 
 	// List of existing browser windows. Only accessed on the CEF UI thread.
 	BrowserList popup_browser_list_;

@@ -19,6 +19,7 @@ QCefViewBrowserApp::QCefViewBrowserApp()
 
 QCefViewBrowserApp::~QCefViewBrowserApp()
 {
+	DEBUG_FUNC();
 }
 //////////////////////////////////////////////////////////////////////////
 void QCefViewBrowserApp::OnBeforeCommandLineProcessing(
@@ -38,10 +39,6 @@ void QCefViewBrowserApp::OnRegisterCustomSchemes(
 	RegisterCustomSchemes(registrar);
 }
 
-CefRefPtr<CefBrowserProcessHandler> QCefViewBrowserApp::GetBrowserProcessHandler()
-{
-	return this;
-}
 
 //////////////////////////////////////////////////////////////////////////
 void QCefViewBrowserApp::OnContextInitialized()
@@ -93,3 +90,42 @@ void QCefViewBrowserApp::OnRenderProcessThreadCreated(
 	}
 }
 
+void QCefViewBrowserApp::OnRenderThreadCreated(CefRefPtr<CefListValue> extra_info)
+{
+	DEBUG_FUNC();
+}
+
+void QCefViewBrowserApp::OnWebKitInitialized()
+{
+	DEBUG_FUNC();
+}
+
+void QCefViewBrowserApp::OnBrowserCreated(CefRefPtr<CefBrowser> browser)
+{
+	DEBUG_FUNC();
+}
+
+void QCefViewBrowserApp::OnBrowserDestroyed(CefRefPtr<CefBrowser> browser)
+{
+	DEBUG_FUNC();
+}
+
+void QCefViewBrowserApp::OnContextCreated(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefV8Context> context)
+{
+	DEBUG_FUNC();
+}
+
+void QCefViewBrowserApp::OnContextReleased(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefV8Context> context)
+{
+	DEBUG_FUNC();
+}
+
+CefRefPtr<CefRenderProcessHandler> QCefViewBrowserApp::GetRenderProcessHandler()
+{
+	return this;
+}
+
+CefRefPtr<CefBrowserProcessHandler> QCefViewBrowserApp::GetBrowserProcessHandler()
+{
+	return this;
+}

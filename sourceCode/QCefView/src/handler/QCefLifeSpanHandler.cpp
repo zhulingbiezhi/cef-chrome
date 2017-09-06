@@ -80,7 +80,6 @@ bool QCefLifeSpanHandler::DoClose(CefRefPtr<CefBrowser> browser)
 		// Set a flag to indicate that the window close should be allowed.
 		m_pBrowserHandler->is_closing_ = true;
 	}
-
 	// Allow the close. For windowed browsers this will result in the OS close
 	// event being sent.
 	return false;
@@ -125,6 +124,5 @@ void QCefLifeSpanHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 		delete m_pBrowserHandler->cefquery_handler_;
 		m_pBrowserHandler->cefquery_handler_ = NULL;
 		m_pBrowserHandler->message_router_ = NULL;
-		CefQuitMessageLoop();
 	}
 }

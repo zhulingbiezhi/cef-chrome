@@ -9,8 +9,9 @@
 
 #include "inc/QCefView.h"
 #include "CCefWindow.h"
+#include "ICefViewBrowser.h"
 
-class QCefQueryHandler  : public CefMessageRouterBrowserSide::Handler
+class QCefQueryHandler : public CefMessageRouterBrowserSide::Handler, public ICefViewBrowser
 {
 public:
 	QCefQueryHandler(QCefView* host);

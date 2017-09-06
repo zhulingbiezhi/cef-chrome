@@ -6,7 +6,6 @@
 
 class QCefViewBrowserHandler;
 
-class QCefViewBrowserHandler;
 
 class QCefRequestHandler : public CefRequestHandler
 {

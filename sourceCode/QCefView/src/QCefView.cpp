@@ -48,11 +48,6 @@ QCefView::QCefView(const QString url, QWidget* parent /*= 0*/)
 QCefView::~QCefView()
 {
 	DEBUG_FUNC();
-
-}
-
-void QCefView::Close()
-{
 	pCefWindow_->Close();
 }
 
@@ -248,8 +243,6 @@ WId QCefView::getCefWinId()
 {
 	return (WId)(HWND)(*pCefWindow_);
 }
-
-
 
 void QCefView::notifyMoveOrResizeStarted()
 {
