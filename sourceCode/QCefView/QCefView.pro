@@ -20,8 +20,6 @@ UI_DIR  = temp/ui
 MOC_DIR = temp/moc
 RCC_DIR = temp/rcc
 
-QMAKE_POST_LINK += copy /y ..\\..\\QCefViewSDK\\inc ..\\..\\..\\Html5Player\\inc &&
-
 CONFIG(release, debug|release) {	
 	OBJECTS_DIR = temp/release
 	DESTDIR = ./bin/release_x86
@@ -31,7 +29,6 @@ CONFIG(release, debug|release) {
 	QMAKE_CXXFLAGS_RELEASE += /MT 
 		QMAKE_POST_LINK += copy /y .\\bin\\release_x86\\QCefView.dll  ..\\..\\QCefViewSDK\\bin\\release_x86 \
 	&& copy /y .\\bin\\release_x86\\QCefView.pdb  ..\\..\\QCefViewSDK\\bin\\release_x86 \
-	&& copy /y .\\bin\\release_x86\\QCefView.lib  ..\\..\\..\\Html5Player\\lib\\release_x86 \
 	&& copy /y .\\bin\\release_x86\\QCefView.lib ..\\..\\QCefViewSDK\\lib\\release_x86 
 }
 CONFIG(debug, debug|release) {
@@ -43,7 +40,6 @@ CONFIG(debug, debug|release) {
 	QMAKE_CXXFLAGS_DEBUG += /MTd
 		QMAKE_POST_LINK += copy /y .\\bin\\debug_x86\\QCefView.dll  ..\\..\\QCefViewSDK\\bin\\debug_x86 \
 	&& copy /y .\\bin\\debug_x86\\QCefView.pdb  ..\\..\\QCefViewSDK\\bin\\debug_x86 \
-	&& copy /y .\\bin\\debug_x86\\QCefView.lib  ..\\..\\..\\Html5Player\\lib\\debug_x86 \
 	&& copy /y .\\bin\\debug_x86\\QCefView.lib ..\\..\\QCefViewSDK\\lib\\debug_x86 
 }
 LIBS += DbgHelp.Lib Advapi32.lib User32.lib Shell32.lib
