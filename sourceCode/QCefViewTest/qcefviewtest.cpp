@@ -101,5 +101,8 @@ void QCefViewTest::onReloadBtnClick()
 void QCefViewTest::onGotoBtnClick()
 {
  	QString url = mpUrlEidt->text();
- 	mpCefview->navigateToUrl(url);
+	if (!url.isEmpty())
+	{
+		mpCefview->navigateToUrl(url);
+	}
 }
