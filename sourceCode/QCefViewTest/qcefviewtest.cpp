@@ -1,8 +1,7 @@
 #include "qcefviewtest.h"
 
 #include <windows.h>
-#include "CCefInvoker.h"
-
+#include <QDebug>
 #include <QDir>
 #include <QCoreApplication>
 #include <QHBoxLayout>
@@ -33,9 +32,8 @@ void QCefViewTest::CreateUI()
 
 	QWidget* viewContainer = new QWidget(this);
 	mpCefview = new CustomCefView(strUrlPath, this);
-	CCefInvoker*   pInvoker = new CCefInvoker();
-	mpCefview->registerInvoker(pInvoker);
 
+	mpCefview->registerInvoker("QCefViewTest", this);
 
 	QHBoxLayout*  viewLyt = new QHBoxLayout;
 	viewLyt->setSpacing(0);
@@ -104,4 +102,9 @@ void QCefViewTest::onGotoBtnClick()
 	{
 		mpCefview->navigateToUrl(url);
 	}
+}
+
+void QCefViewTest::TestMethod(int val1, bool val2, QString val3)
+{
+	qDebug() << __FUNCTION__ << val1 << val2 << val3;
 }

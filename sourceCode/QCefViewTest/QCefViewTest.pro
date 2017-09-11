@@ -26,10 +26,7 @@ MOC_DIR = temp/moc
 RCC_DIR = temp/rcc
 
 HEADERS += ./qcefviewtest.h \
-	../../QCefViewSDK/inc/QCefInvoker.h \
-	./CCefInvoker.h \
     ./customcefview.h
 SOURCES += ./customcefview.cpp \
     ./main.cpp \
-	./CCefInvoker.cpp \
     ./qcefviewtest.cpp

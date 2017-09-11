@@ -49,7 +49,6 @@ RC_FILE = QCefView.rc
 HEADERS += ../public/Common.h \
 	../../QCefViewSDK/inc/QCefCommon.h \
 	../../QCefViewSDK/inc/QCefEvent.h \
-	../../QCefViewSDK/inc/QCefInvoker.h \
 	../../QCefViewSDK/inc/QCefQuery.h \
 	../../QCefViewSDK/inc/QCefSetting.h \
 	../../QCefViewSDK/inc/QCefView.h \
@@ -80,7 +79,6 @@ SOURCES += stdafx.cpp \
     src/QCefQuery.cpp \
     src/QCefSetting.cpp \
     src/QCefView.cpp \	
-	src/QCefInvoker.cpp \
     src/main/CCefSetting.cpp \
     src/main/CCefWindow.cpp \
 	src/main/CCefCookie.cpp \

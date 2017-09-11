@@ -55,6 +55,7 @@ public:
 	*/
 	void GetAllCookie(QList<TCefCookie>& cookieList);
 
+	void runJavaScript(const QString & scriptSource);
 
 	void InitializeCef();
 

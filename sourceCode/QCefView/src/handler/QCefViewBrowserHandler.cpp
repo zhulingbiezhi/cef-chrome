@@ -231,6 +231,17 @@ bool QCefViewBrowserHandler::DispatchNotifyRequest(CefRefPtr<CefBrowser> browser
 					CefString functionName = messageArguments->GetString(idx++);
 					if (functionName == QCEF_INVOKEMETHOD)
 					{
+						QString className;
+						if (CefValueType::VTYPE_STRING == messageArguments->GetType(idx))
+						{
+							#if defined(CEF_STRING_TYPE_UTF16)
+							className = QString::fromWCharArray(messageArguments->GetString(idx++).c_str());
+							#elif defined(CEF_STRING_TYPE_UTF8)
+							className = QString::fromUtf8(messageArguments->GetString(idx++).c_str());
+							#elif defined(CEF_STRING_TYPE_WIDE)
+							className = QString::fromWCharArray(messageArguments->GetString(idx++).c_str());
+							#endif
+						}
 						QString method;
 						if (CefValueType::VTYPE_STRING == messageArguments->GetType(idx))
 						{
@@ -242,7 +253,6 @@ bool QCefViewBrowserHandler::DispatchNotifyRequest(CefRefPtr<CefBrowser> browser
 							method = QString::fromWCharArray(messageArguments->GetString(idx++).c_str());
 							#endif
 						}
-
 						QVariantList arguments;						
 
 						QString qStr;
@@ -296,10 +306,11 @@ bool QCefViewBrowserHandler::DispatchNotifyRequest(CefRefPtr<CefBrowser> browser
 						qSwap(val3,arguments[2]);
 						qSwap(val4,arguments[3]);
 						qSwap(val5,arguments[4]);
-						
-						if (hostWidget_.data()->getInvoker() != nullptr)
+
+						QObject * pInvokerObj = hostWidget_.data()->getInvoker(className);
+						if (pInvokerObj != nullptr)
 						{
-							QMetaObject::invokeMethod(reinterpret_cast<QObject*>(hostWidget_.data()->getInvoker()),
+							QMetaObject::invokeMethod(pInvokerObj,
 								method.toLatin1().data(),
 								Qt::QueuedConnection,
 								QGenericArgument(val1.typeName(), val1.data()),

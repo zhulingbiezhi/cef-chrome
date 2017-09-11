@@ -16,18 +16,19 @@ bool QCefKeyboardHandler::OnPreKeyEvent(CefRefPtr<CefBrowser> browser, const Cef
 {
 	CEF_REQUIRE_UI_THREAD();
 	DEBUG_FUNC();
-	if (event.windows_key_code == VK_RETURN)
-	{
-		return true;   //ignore the key code
-	}
-	else
-	{
-		if (event.windows_key_code == VK_ESCAPE)			//the key will deal with onKeyEvent
-		{
-			*is_keyboard_shortcut = true;
-		}
-		return false;
-	}
+// 	if (event.windows_key_code == VK_RETURN)
+// 	{
+// 		return true;   //ignore the key code
+// 	}
+// 	else
+// 	{
+// 		if (event.windows_key_code == VK_ESCAPE)			//the key will deal with onKeyEvent
+// 		{
+// 			*is_keyboard_shortcut = true;
+// 		}
+// 		return false;
+// 	}
+	return false;
 }
 
 bool QCefKeyboardHandler::OnKeyEvent(CefRefPtr<CefBrowser> browser, const CefKeyEvent& event, CefEventHandle os_event)

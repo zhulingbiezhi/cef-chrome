@@ -175,6 +175,12 @@ void CCefWindow::GetAllCookie(QList<TCefCookie>& cookieList)
 	CCefCookie::getInstance().getAllCookie(cookieList);
 }
 
+void CCefWindow::runJavaScript(const QString & scriptSource)
+{
+	CefRefPtr<CefFrame> frame = pQCefViewHandler_->GetBrowser().get()->GetMainFrame();
+	frame->ExecuteJavaScript(scriptSource.toLatin1().data(), frame->GetURL(), 0);
+}
+
 void CCefWindow::Close()
 {
 	pQCefViewHandler_->CloseAllBrowsers(false);

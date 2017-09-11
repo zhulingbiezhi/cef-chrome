@@ -17,7 +17,6 @@
 #include "inc/QCefQuery.h"
 #include "inc/QCefView.h" 
 #include "inc/QCefEvent.h"
-#include "inc/QCefInvoker.h"
 #include "CCefWindow.h"
 #include "CCefCookie.h"
 #include "QCefViewBrowserHandler.h"
@@ -26,7 +25,6 @@
 QCefView::QCefView(const QString url, QWidget* parent /*= 0*/)
 	: QWidget(parent)
 	, pCefWindow_(NULL)
-	, pCefInvoker_(NULL)
 {
 	QGridLayout* layout = new QGridLayout;
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -56,14 +54,27 @@ void QCefView::Run()
 	pCefWindow_->Run();
 }
 
-QCefInvoker* QCefView::getInvoker()
+QObject* QCefView::getInvoker(const QString& id)
 {
-	return pCefInvoker_.data();
+	std::map<QString, QObject*>::iterator iter = mmapInvoker.find(id);
+	if (iter != mmapInvoker.end())
+	{
+		return mmapInvoker[id];
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
-void QCefView::registerInvoker(QCefInvoker* invoker)
+void QCefView::registerInvoker(const QString& id, QObject* invoker)
 {
-	pCefInvoker_ = invoker;
+	std::map<QString, QObject*>::iterator iter = mmapInvoker.find(id);
+	if (iter != mmapInvoker.end())
+	{
+		mmapInvoker.erase(id);
+	}
+	mmapInvoker[id] = invoker;
 }
 
 void QCefView::getUrlCookie(const QString& url, QList<TCefCookie>& cookieList)
@@ -79,6 +90,11 @@ void QCefView::getAllCookie(QList<TCefCookie>& cookieList)
 void QCefView::setCookie(const QString& url, const QString& key, const QString& value)
 {
 	pCefWindow_->SetCookie(url, key, value);
+}
+
+void QCefView::runJavaScript(const QString & scriptSource)
+{
+	pCefWindow_->runJavaScript(scriptSource);
 }
 
 void QCefView::processQCefUrlRequest(const QString& url)

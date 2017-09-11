@@ -15,6 +15,7 @@ class QCefViewTest : public QWidget
 public:
 	QCefViewTest(QWidget *parent = 0);
 	~QCefViewTest();
+	Q_INVOKABLE void TestMethod(int val1, bool val2, QString val3);
 
 private:
 	void CreateUI();
